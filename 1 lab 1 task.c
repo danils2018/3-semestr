@@ -10,14 +10,24 @@ int str_len(char* s){
 }*/
 
 long long conv_n_to_int(char* s){
-    int i;
+    int i, k = 1;
     long long n = 0;
     for (int i = 0; i < s[i] != '\0'; i++) {
         if(s[i] != '\0') {
-            n = n * 10 + (s[i] - '0');
+            if (s[i] >= '0' && s[i] <= '9') {
+                n = n * 10 + (s[i] - '0');
+            } else {
+                k = 0;
+                break;
+            }
         }
     }
-    return n;
+    if (k){
+        return n;
+    } else {
+        return -1;
+    }
+
 }
 
 void func_h(long long n){
@@ -30,7 +40,7 @@ void func_h(long long n){
         }
     }
     if(k){
-        printf("- mulpiples of %lld", n);
+        printf("- mulpiples of the entered %lld", n);
     } else {
         printf("Within 100 there are no multiples of the entered %lld", n);
     }
@@ -102,15 +112,35 @@ void func_f(long long n){
     }
 }
 
+void entered_parameters_verify(long long n, int argc, char* argv) {
+    if (argc != 3) {
+        printf("Invalid input format!\n");
+        exit(0);
+    } else if(n < 1) {
+        printf("Entered non-positive number!\n");
+        exit(0);
+    }
+    int i, k = 0;
+    for (i = 0; argv[i] != '\0'; i++) {
+        k ++;
+    }
+    if (k != 2) {
+        printf("Flag entered incorrectly!\n");
+    }
+
+}
+
 void main(int argc, char *argv[]) {
 
-    int i, j;
-    int n = conv_n_to_int(argv[1]);
+    int i, j, good_flag = 0;
+    long long n = conv_n_to_int(argv[1]);
+    entered_parameters_verify(n, argc, argv[2]);
     char parametrs [12][3] = {"-h", "/h", "-p", "/p", "-s", "/s", "-e", "/e", "-a", "/a", "-f", "/f"};
 
 
     for (int i = 0; i < 12; i += 2) {
         if (strcmp(parametrs[i], argv[2]) == 0 || strcmp(parametrs[i + 1], argv[2]) == 0) {
+            good_flag = 1;
             switch (parametrs[i][1]) {
                 case 'h':
                     func_h(n);
@@ -130,10 +160,10 @@ void main(int argc, char *argv[]) {
                 case 'f':
                     func_f(n);
                     break;
-                default:
-                    printf("Invalid flag entered!\n");
-                    break;
             }
         }
+    }
+    if(!good_flag) {
+        printf("Invalid flag entered!\n");
     }
 }
