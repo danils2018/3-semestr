@@ -96,7 +96,7 @@ void func_e(long long n){
 }
 
 void func_a(long long n){
-    printf("%lld\n", n * (n + 1) / 2);
+    printf("Sum from 1 to %lld inclusive: %lld\n", n, n * (n + 1) / 2);
 }
 
 long long factorial(long long n){
@@ -133,8 +133,15 @@ void entered_parameters_verify(long long n, int argc, char* argv) {
 void main(int argc, char *argv[]) {
 
     int i, j, good_flag = 0;
-    long long n = conv_n_to_int(argv[1]);
-    entered_parameters_verify(n, argc, argv[2]);
+    long long n;
+    if (argc > 1) {
+        n = conv_n_to_int(argv[1]);
+        entered_parameters_verify(n, argc, argv[2]);
+    } else {
+        printf("Parameters no entered!\n");
+        exit(0);
+    }
+
     char parametrs [12][3] = {"-h", "/h", "-p", "/p", "-s", "/s", "-e", "/e", "-a", "/a", "-f", "/f"};
 
 
