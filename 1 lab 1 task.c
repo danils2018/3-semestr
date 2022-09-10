@@ -59,14 +59,6 @@ int Prime(long long n){
     return k;
 } // Проверка на простоту (1, если простое)
 
-long long power(int a, long long b){
-    long long p = 1;
-    for (int i = 0; i < b; i++) {
-        p *= a;
-    }
-    return p;
-} // Банальное возведение в степень
-
 long long factorial(long long n){
     if (n > 1) {
         if (LLONG_MAX / n > factorial(n - 1))
@@ -109,6 +101,7 @@ int entered_parameters_verify(long long n, int argc, char* argv, int check_error
 
 int main(int argc, char *argv[]) {
     int check_error_in_n = 1;
+    long long power_func_e;
     int i, l, i1, j1, x, ih, kh, good_flag = 0, ERRORS = 1;
     long long n;
     if (argc > 1) {
@@ -163,8 +156,10 @@ int main(int argc, char *argv[]) {
                     if(n <= 10) {
                         for (i1 = 1; i1 <= 10; i1++) {
                             printf("%d - ", i1);
+                            power_func_e = i1;
                             for (j1 = 1; j1 <= n; j1++) {
-                                printf("%lld ", power(i1, j1));
+                                printf("%lld ", power_func_e);
+                                power_func_e *= i1;
                             }
                             printf("\n");
                         }
