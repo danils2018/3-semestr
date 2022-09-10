@@ -60,13 +60,16 @@ int Prime(long long n){
 } // Проверка на простоту (1, если простое)
 
 long long factorial(long long n){
+    long long p = 1;
     if (n > 1) {
-        if (LLONG_MAX / n > factorial(n - 1))
-        {
-            return n * factorial(n - 1);
-        } else {
-            return -1;
+        for (int i = 2; i <= n; i ++){
+            if(LLONG_MAX / p >= i) {
+                p *= i;
+            } else {
+                return -1;
+            }
         }
+        return p;
     }
     else return 1;
 } //Факториал
