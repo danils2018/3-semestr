@@ -72,7 +72,7 @@ long long factorial(long long n){
     }
 } //Факториал
 
-int entered_parameters_verify(long long n, int argc, char* argv, int check_error_in_n) {
+int entered_parameters_verify(int argc, char* argv, int check_error_in_n) {
     if (argc != 3) {
         printf("Invalid input format! (Need 3 arguments)\n");
         return 0;
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
     long long n;
     if (argc > 1) {
         n = conv_n_to_int(argv[1], &check_error_in_n);
-        ERRORS = entered_parameters_verify(n, argc, argv[2], check_error_in_n);
+        ERRORS = entered_parameters_verify(argc, argv[2], check_error_in_n);
     } else {
         printf("Parameters no entered!\n");
         return 0;
