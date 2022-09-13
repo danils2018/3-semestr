@@ -4,6 +4,15 @@
 #include <math.h>
 
 int main(int argc, char *argv[]) {
+
+    if (argc < 2) {
+        printf("Please, input path to the file");
+        return 0;
+    } else if (argc > 2) {
+        printf("Сheck the correctness of the entered data");
+        return 0;
+    }
+
     FILE* input_file = fopen(argv[1], "r");
 
     if (input_file == NULL) {
@@ -87,6 +96,16 @@ int main(int argc, char *argv[]) {
         fprintf(output_file, "\n");
     }
 
+    for(i = 0; i < n; i ++)
+    {
+        for(j = 0; j < 3; j ++)
+            free(matrix[i][j]);
+    }
+    for(i = 0; i < n; i ++)
+    {
+        free(matrix[i]);
+    }
+    free(matrix);
     fclose(output_file);
     return 0;
 }
