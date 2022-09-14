@@ -91,8 +91,8 @@ int main(int argc, char *argv[]) {
             flag = 1;
             max = 0;
             i = 0;
-            if (c == EOF) break;
         }
+        if (c == EOF) break;
     }
 
     fclose(input_file);
