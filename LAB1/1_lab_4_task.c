@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
 int main(int argc, char *argv[]) {
 
@@ -19,93 +20,87 @@ int main(int argc, char *argv[]) {
         printf("Error opening input file\n");
         return 0;
     }
-    char c;
-    int n = 1;
-    int i, j, k, kk = 0;
-    int max_str = 0;
-    while (c = fgetc(input_file)) {
-        if (c == '\n'|| c == EOF) n++;
-        else if (c != ' ' && c != '\n' && c != EOF) {
-            kk ++;
-        } else {if (kk > max_str) max_str = kk; kk = 0;}
-        if(c == EOF) break;
-    }
-    fclose(input_file);
 
-    input_file = fopen(argv[1], "r");
-    char*** matrix = (char***) malloc(sizeof(char**) * n);
+    //int n;
+    int i, n = 10;
 
-    for(i = 0; i < n; i ++)
+    char** matrix = (char**) malloc(sizeof(char*) * 3);
+
+    for(i = 0; i < 3; i ++)
     {
-        matrix[i] = (char**) malloc(sizeof(char*) * 3);
+        matrix[i] = (char*) malloc(sizeof(char) * n);
     }
-    for(i = 0; i < n; i ++)
-    {
-        for(j = 0; j < 3; j ++)
-        matrix[i][j] = (char*) malloc(sizeof(char) * max_str);
-    }
-    i = 0;
-    j = 0;
-    k = 0;
-    int flag = 0;
-    while ((c = fgetc(input_file))) {
-        if (c != ' ' && c != '\n' && c != EOF) {
-            matrix[i][j][k] = c;
-            k++;
-            flag = 0;
-        } else if (c == ' ' && flag == 0){
-            matrix[i][j][k] = ' ';
-            flag = 1;
-            k = 0;
-            j++;
-        } else if (c == '\n') {
-            if (flag == 0) {
-                matrix[i][j][k] = ' ';
-            } else {
-                flag = 1;
-            }
-            i ++;
-            j = 0;
-            k = 0;
-        } else if (c == EOF) {
-            if (flag == 0) {
-                matrix[i][j][k] = ' ';
-            } else {
-                flag = 1;
-            }
-            break;
+
+
+    // генерация названия файла.
+    char* output;
+    int j, ukazatel_na_slash = -1;
+    output = malloc(sizeof(char) * 300);
+    for (j = 0; argv[0][j] != '\0'; j++) {
+        if (argv[0][j] == '\\') {
+            ukazatel_na_slash = j;
         }
-
     }
 
-    fclose(input_file);
-    FILE* output_file = fopen(argv[1], "w");
+    for (j = 0; j <= ukazatel_na_slash; j++) {
+        output[j] = argv[0][j];
+    }
+    strcpy(output, "out.txt");
+
+
+    FILE* output_file = fopen(output, "w");
     if (output_file == NULL) {
         printf("Error opening output file\n");
         return 0;
     }
-
-    for (int i1 = 0; i1 < n; i1 ++) {
-        for (int i2 = 0; i2 < 3; i2 ++) {
-            for (int i3 = 0; i3 < max_str; i3 ++)
-            {
-                fprintf(output_file, "%c", matrix[i1][(i2 + 2) % 3][i3]);
-                if (matrix[i1][(i2 + 2) % 3][i3] == ' ') break;
+    i = 0, j = 0;
+    char ch, _c = 0;
+    while (!feof(input_file)) {
+        ch = fgetc(input_file);
+        if (!isspace(ch)) {
+            if(j >= n) {
+                n += 128;
+                matrix[i] = realloc(matrix[i], n);
             }
+            matrix[i][j] = ch;
+            j++;
+        } else if (isspace(ch) && !isspace(_c)){
+            if(j >= n) {
+                n += 128;
+                matrix[i] = realloc(matrix[i], n);
+            }
+            matrix[i][j] = '\0';
+            i++;
+            if (i == 3) {
+                for (int k = 0; k < 3; ++k){
+                    fprintf(output_file, "%s ", matrix[(k + 2) % 3]);
+                }
+                fprintf(output_file, "\n");
+                i = 0;
+            }
+            j = 0;
         }
-        fprintf(output_file, "\n");
+        _c = ch;
     }
-
-    for(i = 0; i < n; i ++)
-    {
-        for(j = 0; j < 3; j ++)
-            free(matrix[i][j]);
-    }
-    for(i = 0; i < n; i ++)
+    for(i = 0; i < 3; i ++)
     {
         free(matrix[i]);
     }
     free(matrix);
+
+    fclose(input_file);
     fclose(output_file);
+
+    input_file = fopen(output, "r");
+    output_file = fopen(argv[1], "w");
+
+    char c;
+    while((c = getc(input_file)) != EOF) {
+        fprintf(output_file, "%c", c);
+    }
+    fclose(input_file);
+    fclose(output_file);
+
+    remove(output);
     return 0;
 }

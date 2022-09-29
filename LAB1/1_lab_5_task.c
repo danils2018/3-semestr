@@ -4,9 +4,6 @@
 #include <math.h>
 
 int main(int argc, char *argv[]) {
-
-
-
     // генерация названия файла.
 
     char* output;
@@ -52,7 +49,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    char parametrs [3][5] = {"-fi", "-cin", "-arg"};
+    char* parametrs [3] = {"-fi", "-cin", "-arg"};
 
     FILE* input_file;
     FILE* input_files_in_file;
@@ -95,7 +92,7 @@ int main(int argc, char *argv[]) {
                         if(scanf("%s", &mass) == 1) {
                             input_files_in_file = fopen(mass, "r");
                             if(input_files_in_file != NULL) {
-                                printf("%s!!!!!!!!!!!!!!!!!!!!\n", mass);
+                                //printf("%s!!!!!!!!!!!!!!!!!!!!\n", mass);
                                 while((c = fgetc(input_files_in_file)) != EOF)
                                 {
                                     fprintf(output_file, "%c", c);
@@ -128,12 +125,8 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    //fclose(input_file);
     fclose(output_file);
     free(output);
-
-
-
 
     return 0;
 }

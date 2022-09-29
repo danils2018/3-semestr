@@ -36,9 +36,10 @@ int main(int argc, char *argv[]) {
     int j = 0, ukazatel_na_slash = -1;
     int len_argv_2 = strlen(argv[1]);
     output = malloc(sizeof(char) * (len_argv_2 + 4));
-    for (j = 0; j < len_argv_2; j++) {
+    for (j = len_argv_2 - 1; j >= 0; --j) {
         if (argv[1][j] == '\\') {
             ukazatel_na_slash = j;
+            break;
         }
     }
 
@@ -79,20 +80,20 @@ int main(int argc, char *argv[]) {
             fprintf(output_file, "%c", c);
             flag = 0;
             i++;
-        } else if (flag == 0) {
-            fprintf(output_file, " - minimum number system: %d  =>  ", max + 1);
-
+        } else if (!flag) {
+            max++;
+            fprintf(output_file, " - minimum number system: %d  =>  ", max);
             long long p = 1, result = 0;
             for(int l = i - 1; l >= 0; l --){
                 result += (p * to_cc(array[l]));
-                p *= (max + 1);
+                p *= (max);
             }
             fprintf(output_file, "%lld\n", result);
             flag = 1;
             max = 0;
             i = 0;
+            if (c == EOF) break;
         }
-        if (c == EOF) break;
     }
 
     fclose(input_file);

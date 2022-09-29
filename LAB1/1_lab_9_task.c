@@ -51,8 +51,8 @@ int main(void) {
         } else {
             break;
         }
-    }
-    while(1);
+    } while(1);
+
     long long p = 1, result = 0;
     for(int i = max_str_len - 1; i >= 0; --i) {
         f = to_cc(max_str[i]);
