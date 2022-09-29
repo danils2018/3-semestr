@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
     }
     fclose(input_file);
     fclose(output_file);
-
+    free(output);
     remove(output);
     return 0;
 }
