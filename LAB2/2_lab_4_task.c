@@ -12,7 +12,7 @@ double function1(int n, ...)
         result *= va_arg(factor, double);
     }
     va_end(factor);
-    return pow(result, 1 / n);
+    return pow(result, 1. / n);
 }
 
 double power(double a, int n) {
