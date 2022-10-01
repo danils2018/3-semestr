@@ -39,6 +39,7 @@ int main(void) {
         scanf("%s", &c);
         if (strcmp(c, "Stop") != 0) {
             int x = strlen(c);
+            if (c[0] == '-') --x;
             if (x > max_str_len) {
                 func_prisvaiv(&max_str, &c);
                 max_str_len = x;
@@ -53,15 +54,19 @@ int main(void) {
         }
     } while(1);
 
-    long long p = 1, result = 0;
+    long long p = 1, result = 0, minus = 0;
     for(int i = max_str_len - 1; i >= 0; --i) {
+        if (max_str[i] == '-' && i == 0) {
+            minus = 1;
+            continue;
+        }
         f = to_cc(max_str[i]);
         if (f == -1) {printf("Invalid character encountered on line %s ", max_str); return 0;};
         result += (p * f);
         p *= n;
     }
     max_str[max_str_len] = '\0';
-    printf("\nMax str: %s  In decimal number system: %d\n", max_str, result);
+    printf("\nMax str: %s  In decimal number system: %d\n", max_str, (minus) ? -result : result);
 
     int len_cc = 0, j = 0;
     char mass_cc[50];
@@ -74,15 +79,13 @@ int main(void) {
             len_cc++;
         }
         printf("In counting system %d -> ", cc);
-
+        printf("%s", (minus) ? "-" : "");
         for(int i = len_cc - 1; i >= 0; --i) {
             printf("%c", mass_cc[i]);
         }
         printf("\n");
         len_cc = 0;
     }
-
-
 
     return 0;
 }
