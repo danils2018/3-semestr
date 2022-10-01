@@ -3,6 +3,42 @@
 #include <string.h>
 #include <math.h>
 
+char* file_name_generation(const char* str) {
+    char* output;
+    int j = 0, ukazatel_na_slash = -1;
+    int len_argv_2 = strlen(str);
+    output = malloc(sizeof(char) * (len_argv_2 + 4));
+    if (output == NULL)
+        return NULL;
+    for (j = len_argv_2 - 1; j >= 0; --j) {
+        if (str[j] == '\\') {
+            ukazatel_na_slash = j;
+            break;
+        }
+    }
+
+    for (j = 0; j <= ukazatel_na_slash; j++) {
+        output[j] = str[j];
+    }
+
+
+    for (j = ukazatel_na_slash + 1; j < len_argv_2 + 4; j++) {
+        int l = j - (ukazatel_na_slash + 1);
+        if (l == 0) {
+            output[j] = 'o';
+        } else if (l == 1) {
+            output[j] = 'u';
+        } else if (l == 2) {
+            output[j] = 't';
+        } else if (l == 3) {
+            output[j] = '_';
+        } else {
+            output[j] = str[j - 4];
+        }
+    }
+    return output;
+}
+
 int to_cc(char c)
 {
     if (c >= 'A' && c <= 'Z') return c - 'A' + 10;
@@ -32,43 +68,17 @@ int main(int argc, char *argv[]) {
     int i = 0;
 
     // генерация названия файла.
-    char* output;
-    int j = 0, ukazatel_na_slash = -1;
-    int len_argv_2 = strlen(argv[1]);
-    output = malloc(sizeof(char) * (len_argv_2 + 4));
-    for (j = len_argv_2 - 1; j >= 0; --j) {
-        if (argv[1][j] == '\\') {
-            ukazatel_na_slash = j;
-            break;
-        }
-    }
-
-    for (j = 0; j <= ukazatel_na_slash; j++) {
-        output[j] = argv[1][j];
-    }
-
-
-    for (j = ukazatel_na_slash + 1; j < len_argv_2 + 4; j++) {
-        int l = j - (ukazatel_na_slash + 1);
-        if (l == 0) {
-            output[j] = 'o';
-        } else if (l == 1) {
-            output[j] = 'u';
-        } else if (l == 2) {
-            output[j] = 't';
-        } else if (l == 3) {
-            output[j] = '_';
-        } else {
-            output[j] = argv[1][j - 4];
-        }
-    }
+    char* output = file_name_generation(argv[1]);
 
     FILE* output_file = fopen(output, "w");
-
+    if (output_file == NULL) {
+        printf("Error opening output file\n");
+        return 0;
+    }
 
     char array[50]; //сюда должно влезать число в какой-то системе счисления.
     int flag = 0;
-    int max = 0;
+    int max = 1;
     while ((c = fgetc(input_file))) {
         if (c != ' ' && c != '\n' && c != EOF) {
             array[i] = c;
@@ -79,7 +89,7 @@ int main(int argc, char *argv[]) {
             if (to_cc(c) > max) {max = to_cc(c);}
             fprintf(output_file, "%c", c);
             flag = 0;
-            i++;
+            ++i;
         } else if (!flag) {
             max++;
             fprintf(output_file, " - minimum number system: %d  =>  ", max);
@@ -90,7 +100,7 @@ int main(int argc, char *argv[]) {
             }
             fprintf(output_file, "%lld\n", result);
             flag = 1;
-            max = 0;
+            max = 1;
             i = 0;
             if (c == EOF) break;
         }
@@ -98,9 +108,6 @@ int main(int argc, char *argv[]) {
 
     fclose(input_file);
     fclose(output_file);
-
-
-
-
+    free(output);
     return 0;
 }

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include <math.h>
 
 double function1(int n, ...)
 {
@@ -12,7 +11,7 @@ double function1(int n, ...)
         result *= va_arg(factor, double);
     }
     va_end(factor);
-    return pow(result, 1. / n);
+    return sqrt(result);
 }
 
 double power(double a, int n) {
