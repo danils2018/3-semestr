@@ -62,9 +62,9 @@ int main(int argc, char *argv[]) {
     }
 
 
-    int i, n = 16, j;
-
-    char** matrix = generate_matrix(3, n);
+    int i, j;
+    int size_matrix []= {16, 16, 16};
+    char** matrix = generate_matrix(3, 16);
 
     char* output = file_name_generation(argv[0]);
 
@@ -81,16 +81,16 @@ int main(int argc, char *argv[]) {
     while (!feof(input_file)) {
         ch = fgetc(input_file);
         if (!isspace(ch)) {
-            if(j >= n) {
-                n *= 2;
-                matrix[i] = realloc(matrix[i], n);
+            if(j >= size_matrix[i]) {
+                size_matrix[i] *= 2;
+                matrix[i] = realloc(matrix[i], sizeof(char*) * size_matrix[i]);
             }
             matrix[i][j] = ch;
             j++;
         } else if (isspace(ch) && !isspace(_c)){
-            if(j >= n) {
-                n *= 2;
-                matrix[i] = realloc(matrix[i], n);
+            if(j >= size_matrix[i]) {
+                size_matrix[i] *= 2;
+                matrix[i] = realloc(matrix[i], sizeof(char*) * size_matrix[i]);
             }
             matrix[i][j] = '\0';
             i++;
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
     fclose(input_file);
     fclose(output_file);
 
-    free(output);
     remove(output);
+    free(output);
     return 0;
 }

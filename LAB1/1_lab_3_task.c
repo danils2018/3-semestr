@@ -17,8 +17,7 @@ int entered_parameters_verify(int argc, char** argv) {
         return 0;
     }
     return 1;
-} //в зависимости от чек ерор что-то печатает, и возвращается значение о продолжении работы программы. (если 0, то завершить)
-
+}
 int symbol_is_bukva(char c)
 {
     return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z');
@@ -71,13 +70,14 @@ int main(int argc, char *argv[]) {
         int j = 0, ukazatel_na_slash = -1;
         int len_argv_2 = strlen(argv[2]);
         output = malloc(sizeof(char) * (len_argv_2 + 4));
-        for (j = 0; j < len_argv_2; j++) {
+        for (j = len_argv_2 - 1; j >= 0; --j) {
             if (argv[2][j] == '\\') {
                 ukazatel_na_slash = j;
+                break;
             }
         }
 
-        for (j = 0; j <= ukazatel_na_slash; j++) {
+        for (j = 0; j <= ukazatel_na_slash; ++j) {
             output[j] = argv[2][j];
         }
 
